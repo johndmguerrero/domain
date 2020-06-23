@@ -29,21 +29,16 @@ class DomainsController < ApplicationController
   # POST /domains.json
   def create
 
-    # @domain = Domain.new(domain_params_register)
+    @domain = Domain.new(domain_params_register)
 
-    if Domain.where(name: params[:name])
-      
-
-    else
       respond_to do |format|
-        # if @domain.save
+        if @domain.save
           format.html { redirect_to @domain, notice: 'Domain is already existed.' }
-        #   format.json { render :index, status: :created, location: @domain }
-        # else
-        #   format.html { render :new }
-        #   format.json { render json: @domain.errors, status: :unprocessable_entity }
-        # end
-      end
+          format.json { render :index, status: :created, location: @domain }
+        else
+          format.html { render :new }
+          format.json { render json: @domain.errors, status: :unprocessable_entity }
+        end
     end
   end
 
