@@ -9,6 +9,9 @@ class DomainsController < ApplicationController
 
     @domain = Domain.new
 
+    if Domain.exists?(:name => params[:search])
+      redirect_to @domain, notice: 'Domain is already existed.'
+    end
   end
 
   # GET /domains/1
@@ -18,7 +21,7 @@ class DomainsController < ApplicationController
 
   # GET /domains/new
   def new
-    @domain = Domain.new
+    # @domain = Domain.new
   end
 
   # GET /domains/1/edit
@@ -40,6 +43,7 @@ class DomainsController < ApplicationController
           format.json { render json: @domain.errors, status: :unprocessable_entity }
         end
     end
+    
   end
 
   # PATCH/PUT /domains/1
