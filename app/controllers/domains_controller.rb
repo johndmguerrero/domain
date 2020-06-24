@@ -2,16 +2,17 @@ class DomainsController < ApplicationController
   protect_from_forgery with: :exception
   before_action :set_domain, only: [:show, :edit, :update, :destroy]
 
+
   # GET /domains
   # GET /domains.json
   def index
-    @domains = Domain.all
+    # @domains = Domain.all
+    # @domain = Domain.new
+    # if Domain.exists?(:name => params[:search])
+    #   redirect_to @domain, notice: 'Domain is already existed.'
+    # end
 
-    @domain = Domain.new
 
-    if Domain.exists?(:name => params[:search])
-      redirect_to @domain, notice: 'Domain is already existed.'
-    end
   end
 
   # GET /domains/1
@@ -85,4 +86,5 @@ class DomainsController < ApplicationController
       params.require(:domain).permit(:name,:period)
     end
     
+
 end

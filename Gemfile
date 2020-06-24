@@ -29,6 +29,8 @@ gem 'devise', '~> 4.7', '>= 4.7.2'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
+gem 'epp-client',           github: 'dotph/epp-client'
+
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 

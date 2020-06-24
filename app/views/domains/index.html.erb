@@ -1,20 +1,5 @@
 <p id="notice"><%= notice %></p>
-
-
-  <% if !params[:search] %>
-
-    <%= render 'search' %>
-
-  <% end %>
-
-
-
-  <%= render 'form', domain: @domain %>
-
-
-
-<h1>Domains</h1>
-
+  
 <table>
   <thead>
     <tr>
@@ -34,6 +19,7 @@
   </tbody>
 </table>
 
+
 <br>
 
-<%# <%= link_to 'New Domain', new_domain_path %> 
+<%= link_to 'New Domain', new_domain_path  %>

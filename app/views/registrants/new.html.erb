@@ -1,0 +1,40 @@
+<h1> bilhin na ang <%= params[:search] || params[:domain_name] %></h1>
+
+<h2><%= @new_domain %></h2>
+
+  <% if params[:search] %>
+      <table>
+        <thead>
+          <tr>
+            <th colspan="3"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= form_tag new_registrant_path, :method => 'get' do %>
+          <tr <%= @check.available?() %>>
+            <%= hidden_field_tag(:domain_name,"#{params[:search]}")%>
+            <td><%= params[:search] || params[:domain_name] %></td>
+            <td>
+                <%= select_tag(:span, options_for_select([['1 Year',1],['2 years',2],['5 years',5],['10 years',10]])) %></td>
+            <td>
+            <%= submit_tag "Buy"%>
+            </td>
+          </tr>
+          <% end %>
+          <%= form_tag new_registrant_path, :method => 'get' do %>
+          <tr>
+            <%= hidden_field_tag(:domain_name,"#{params[:search]}")%>
+            <td><%= params[:search] || params[:domain_name] %></td>
+            <td>
+                <%= select_tag(:span, options_for_select([['1 Year',1],['2 years',2],['5 years',5],['10 years',10]])) %></td>
+            <td>
+            <%= submit_tag "Buy"%>
+            </td>
+          </tr>
+          <% end %>
+
+
+        </tbody>
+      </table>
+
+  <% end %>
