@@ -31,6 +31,8 @@ class RegistrantsController < ApplicationController
     @handle
     @domain_name = params[:search]
 
+    @domain_name.to_s.gsub('.com','').gsub('.ph','').gsub('.org','')
+
     # if params[:domain_name]
     #   domain     = params[:domain_name]
     #   response   = @client.check EPP::Domain::Check.new(domain)

@@ -1,7 +1,14 @@
 <h1> bilhin na ang <%= params[:search] || params[:domain_name] %></h1>
 
 <h2><%= @new_domain %></h2>
+<h2></h2>
+<%= "#{params[:search]}.com" %>
 
+  <style>
+    .disable{
+      opacity: 0.3;
+    }
+  </style>
   <% if params[:search] %>
       <table>
         <thead>
@@ -10,28 +17,17 @@
           </tr>
         </thead>
         <tbody>
+
+
+            <tr <%= @check.available?("#{params[:search]}.com") ? '' : 'class="disable"' %>>
           <%= form_tag new_registrant_path, :method => 'get' do %>
-          <tr <%= @check.available?() %>>
-            <%= hidden_field_tag(:domain_name,"#{params[:search]}")%>
-            <td><%= params[:search] || params[:domain_name] %></td>
-            <td>
-                <%= select_tag(:span, options_for_select([['1 Year',1],['2 years',2],['5 years',5],['10 years',10]])) %></td>
-            <td>
-            <%= submit_tag "Buy"%>
-            </td>
-          </tr>
+              <%= hidden_field_tag(:domain_name,"#{params[:search]}")%>
+              <td><%= params[:search] || params[:domain_name] %></td>
+              <td><%= select_tag(:span, options_for_select([['1 Year',1],['2 years',2],['5 years',5],['10 years',10]])) %></td>
+              <td><%= submit_tag "Buy"%></td>
           <% end %>
-          <%= form_tag new_registrant_path, :method => 'get' do %>
-          <tr>
-            <%= hidden_field_tag(:domain_name,"#{params[:search]}")%>
-            <td><%= params[:search] || params[:domain_name] %></td>
-            <td>
-                <%= select_tag(:span, options_for_select([['1 Year',1],['2 years',2],['5 years',5],['10 years',10]])) %></td>
-            <td>
-            <%= submit_tag "Buy"%>
-            </td>
-          </tr>
-          <% end %>
+            </tr>
+
 
 
         </tbody>
