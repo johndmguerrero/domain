@@ -5,4 +5,7 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   resources :domains
   resources :registrants
+
+  post "/payment/create" => 'payments#create'
+  post "/payment/execute" => 'payments#execute'
 end

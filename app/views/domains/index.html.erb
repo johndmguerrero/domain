@@ -11,6 +11,7 @@
     <% @domains.each do |domain| %>
       <tr>
         <td><%= domain.name %></td>
+        <td><%= domain.period %></td>
         <td><%= link_to 'Show', domain %></td>
         <td><%= link_to 'Edit', edit_domain_path(domain) %></td>
         <td><%= link_to 'Destroy', domain, method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -22,4 +23,72 @@
 
 <br>
 
-<%= link_to 'New Domain', new_domain_path  %>
+<%# link_to 'New Domain', new_domain_path  %>
+
+
+<%# render 'form', domain: @domain %>
+
+<%# @result  %>
+
+<%# render 'registrants/partials/search' %>
+
+<input type="text" id="domain" >
+<select name="" id="period">
+  <option>1 yr </option>
+  <option>2 yrs </option>
+  <option>5 yrs </option>
+  <option>10 yrs </option>
+</select>
+
+<div id="paypal-checkout"></div>
+<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+<script>
+  paypal.Button.render({
+    env: "sandbox",
+    client: {
+      sandbox: "AW4I8tHeTC_xdRHrcvpgD2RgBHC-QlhnNO3uP_ZyUjpCanJbxbMvM3qI9nbnSv2ZtrMf_jNOZMuJV055"
+    },
+    style: {
+      layout: 'vertical',
+      size:  'medium',
+      shape: 'rect',
+      color: 'blue',
+    },
+    commit: true,
+    funding: {
+      allowed: [paypal.FUNDING.CARD],
+      disallowed: [paypal.FUNDING.CREDIT]
+    },
+    payment: function(data, actions) {
+      domain = document.getElementById("domain").value;
+      period = document.getElementById("period").value;
+
+      params = {domain: domain,period: period};
+
+      createPath = "http://localhost:3000/payment/create"
+      return actions.request.post(createPath, params).then(function(response) {
+        return response.id;
+      });
+    },
+    onAuthorize: function(data, actions) {
+
+      domain = document.getElementById("domain").value;
+      period = document.getElementById("period").value;
+
+
+      params = {payment_id: data.paymentID, payer_id: data.payerID, domain: domain, period: period }
+
+      executePath = "http://localhost:3000/payment/execute"
+      return actions.request.post(executePath, params).then(function(response) {
+        if (response.payment_state == "approved") {
+          javascript:window.location.href = `http://localhost:3000/registrants?domain=${domain}` // Replace this with your successful registration page
+          
+        }
+      });
+    },
+    onError: function (err) {
+      alert('Error!');
+    }
+  }, '#paypal-checkout');
+
+</script>

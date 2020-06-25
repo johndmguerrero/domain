@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_24_085515) do
+ActiveRecord::Schema.define(version: 2020_06_25_091849) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,32 +21,8 @@ ActiveRecord::Schema.define(version: 2020_06_24_085515) do
     t.string "contacts"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "postal_info_ints", force: :cascade do |t|
-    t.string "name"
-    t.string "org"
-    t.string "address"
-    t.string "street"
-    t.string "city"
-    t.string "sp"
-    t.string "pc"
-    t.string "cc"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "postal_infos", force: :cascade do |t|
-    t.string "name"
-    t.string "org"
-    t.string "address"
-    t.string "street"
-    t.string "city"
-    t.string "sp"
-    t.string "pc"
-    t.string "cc"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.bigint "registrant_id"
+    t.index ["registrant_id"], name: "index_domains_on_registrant_id"
   end
 
   create_table "registrants", force: :cascade do |t|
@@ -56,6 +32,22 @@ ActiveRecord::Schema.define(version: 2020_06_24_085515) do
     t.string "auth_info_password"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "int_name"
+    t.string "int_org"
+    t.string "int_addr"
+    t.string "int_addr_st"
+    t.string "int_addr_cty"
+    t.string "int_addr_sp"
+    t.string "int_addr_pc"
+    t.string "int_addr_cc"
+    t.string "lcl_name"
+    t.string "lcl_org"
+    t.string "lcl_addr"
+    t.string "lcl_addr_st"
+    t.string "lcl_addr_cty"
+    t.string "lcl_addr_sp"
+    t.string "lcl_addr_pc"
+    t.string "lcl_addr_cc"
   end
 
   create_table "users", force: :cascade do |t|

@@ -32,7 +32,7 @@ gem 'simple_form'
 # gem 'bcrypt', '~> 3.1.7'
 
 gem 'epp-client',           github: 'dotph/epp-client'
-
+gem 'paypal-sdk-rest', '~> 1.7.2', github: 'dotph/PayPal-Ruby-SDK'
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 

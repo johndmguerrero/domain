@@ -1,36 +1,133 @@
-<h1> bilhin na ang <%= params[:search] || params[:domain_name] %></h1>
+<h1> bilhin na ang <%= params[:search] || params[:domain_name] || params[:bought_domain] %></h1>
 
 <h2><%= @new_domain %></h2>
-<h2></h2>
-<%= "#{params[:search]}.com" %>
-
-  <style>
-    .disable{
-      opacity: 0.3;
-    }
-  </style>
-  <% if params[:search] %>
-      <table>
-        <thead>
-          <tr>
-            <th colspan="3"></th>
-          </tr>
-        </thead>
-        <tbody>
-
-
-            <tr <%= @check.available?("#{params[:search]}.com") ? '' : 'class="disable"' %>>
-          <%= form_tag new_registrant_path, :method => 'get' do %>
-              <%= hidden_field_tag(:domain_name,"#{params[:search]}")%>
-              <td><%= params[:search] || params[:domain_name] %></td>
-              <td><%= select_tag(:span, options_for_select([['1 Year',1],['2 years',2],['5 years',5],['10 years',10]])) %></td>
-              <td><%= submit_tag "Buy"%></td>
-          <% end %>
-            </tr>
 
 
 
-        </tbody>
-      </table>
+
+<% if params[:bought_domain] && params[:span] %>
+  <p style="margin-bottom: 5px">
+  <input disabled type="text" id="domain" value=<%= params[:search] %>>
+  <select name="" id="period">
+    <option>1 yr </option>
+    <option>2 yrs </option>
+    <option>5 yrs </option>
+    <option>10 yrs </option>
+  </select>
+  </p>
+  <div id="paypal-checkout"></div>
+  <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+  <script>
+    paypal.Button.render({
+      env: "sandbox",
+      client: {
+        sandbox: "AW4I8tHeTC_xdRHrcvpgD2RgBHC-QlhnNO3uP_ZyUjpCanJbxbMvM3qI9nbnSv2ZtrMf_jNOZMuJV055"
+      },
+      style: {
+        layout: 'vertical',
+        size:  'medium',
+        shape: 'rect',
+        color: 'blue',
+      },
+      commit: true,
+      funding: {
+        allowed: [paypal.FUNDING.CARD],
+        disallowed: [paypal.FUNDING.CREDIT]
+      },
+      payment: function(data, actions) {
+        domain = document.getElementById("domain").value;
+        period = document.getElementById("period").value;
+
+        params = {domain: domain,period: period};
+
+        createPath = "http://localhost:3000/payment/create"
+        return actions.request.post(createPath, params).then(function(response) {
+          return response.id;
+        });
+      },
+      onAuthorize: function(data, actions) {
+
+        domain = document.getElementById("domain").value;
+        period = document.getElementById("period").value;
+
+
+        params = {payment_id: data.paymentID, payer_id: data.payerID, domain: domain, period: period }
+
+        executePath = "http://localhost:3000/payment/execute"
+        return actions.request.post(executePath, params).then(function(response) {
+          if (response.payment_state == "approved") {
+            javascript:window.location.href = `http://localhost:3000/registrants/new?bought_domain=${domain}&span=${period}` // Replace this with your successful registration page
+            
+          }
+        });
+      },
+      onError: function (err) {
+        alert('Error!');
+      }
+    }, '#paypal-checkout');
+
+  </script>
+<% end %>
+
+<% if params[:bought_domain] %>
+  <%= form_with model: @registrant, local: true do |form| %>
+      <%= form.hidden_field :domain, :value => params[:bought_domain] %>
+      <%= form.hidden_field :span, :value => params[:span] %>
+      <h2>international info<h2>
+      <div class="info-code">
+        <%= form.label :name %>
+        <%= form.text_field :int_name %>
+        <%= form.label :org %>
+        <%= form.text_field :int_org %>
+        <%= form.label :addr, "address" %>
+        <%= form.text_field :int_addr %>
+        <%= form.label :int_addr_st, "Street" %>
+        <%= form.text_field :int_addr_st %>
+        <%= form.label :int_addr_cty,"City" %>
+        <%= form.text_field :int_addr_cty %>
+        <%= form.label :int_addr_sp, "sp" %>
+        <%= form.text_field :int_addr_sp %>
+        <%= form.label :int_addr_pc, "pc" %>
+        <%= form.text_field :int_addr_pc %>
+        <%= form.label :int_addr_cc,  "cc"  %>
+        <%= form.text_field :int_addr_cc %>
+      </div>
+
+      <h2>personal info</h2>
+      <div class="info-code">
+        <%= form.label :name %>
+        <%= form.text_field :lcl_name %>
+        <%= form.label :org %>
+        <%= form.text_field :lcl_org %>
+        <%= form.label :addr, "address" %>
+        <%= form.text_field :lcl_addr %>
+        <%= form.label :lcl_addr_st, "Street" %>
+        <%= form.text_field :lcl_addr_st %>
+        <%= form.label :lcl_addr_cty,"City" %>
+        <%= form.text_field :lcl_addr_cty %>
+        <%= form.label :lcl_addr_sp, "sp" %>
+        <%= form.text_field :lcl_addr_sp %>
+        <%= form.label :lcl_addr_pc, "pc" %>
+        <%= form.text_field :lcl_addr_pc %>
+        <%= form.label :lcl_addr_cc,  "cc"  %>
+        <%= form.text_field :lcl_addr_cc %>
+      </div>
+      
+      <h2>Other Info<h2>
+      <div class="info-box">
+        <%= form.label :voice,  "Voice"  %>
+        <%= form.text_field :voice %>
+        <%= form.label :fax,  "fax"  %>
+        <%= form.text_field :fax %>
+        <%= form.label :email,  "email"  %>
+        <%= form.text_field :email %>
+        <%= form.label :auth_info_password,  "auth password"  %>
+        <%= form.text_field :auth_info_password %>
+      </div>
+      <%= form.submit "register" %>
 
   <% end %>
+<% end %>
+
+
+

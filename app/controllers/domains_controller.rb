@@ -6,8 +6,8 @@ class DomainsController < ApplicationController
   # GET /domains
   # GET /domains.json
   def index
-    # @domains = Domain.all
-    # @domain = Domain.new
+    @domains = Domain.all
+    @domain = Domain.new
     # if Domain.exists?(:name => params[:search])
     #   redirect_to @domain, notice: 'Domain is already existed.'
     # end
@@ -22,7 +22,7 @@ class DomainsController < ApplicationController
 
   # GET /domains/new
   def new
-    # @domain = Domain.new
+    @domain = Domain.new
   end
 
   # GET /domains/1/edit
