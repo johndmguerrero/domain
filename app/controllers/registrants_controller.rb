@@ -24,7 +24,7 @@ class RegistrantsController < ApplicationController
   end
 
   def show
-
+    render :reciept
   end
 
   def new

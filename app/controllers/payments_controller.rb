@@ -40,6 +40,8 @@ class PaymentsController < ApplicationController
 
     @payment.create
 
+
+
     render json: {id: @payment.id } # Fill in the the Payment ID
   end
 
@@ -47,23 +49,43 @@ class PaymentsController < ApplicationController
     # Implement payment execution
     payment_id = params[:payment_id]
     payer_id   = params[:payer_id]
-    domain = params[:domain]
+    domain_name = params[:domain]
     period = params[:period]
+    emailrep = params[:emailrep]
 
     payment = Payment.find(payment_id)
+
 
     if payment.execute( :payer_id => payer_id )
       # Success Message
       # Note that you'll need to `Payment.find` the payment again to access user info like shipping address
-      @domain = Domain.new
-      @domain.name = domain
-      @domain.period = period
 
-      if @domain.save
-          state = payment.state
-          
-          render json: {payment_state: state } # Fill in the the payment state
+      order = ::Order.new
+      order.user_id = payer_id
+
+      if order.save
+
+        domain = Domain.new
+        domain.name = domain_name
+        domain.period = period
+        domain.order = order
+        domain.user_id = payer_id
+  
+        if domain.save
+
+            regist = ::Registrant.new
+            regist.email = emailrep
+            regist.domain = domain
+            if regist.save
+
+            state = payment.state
+            
+            render json: {payment_state: state,user_id: payer_id, order_num: order.id } # Fill in the the payment state
+            
+            end 
+        end
       end
+
     else
       payment.error # Error Hash
     end

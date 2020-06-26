@@ -20,7 +20,7 @@
 
   <% form.label :name %>
     <%= form.text_field :name %>
-    <%= select_tag(:span, options_for_select([['1 Year',1],['2 years',2],['5 years',5],['10 years',10]])) %>
+    <%= form.select(:period, options_for_select([['1 Year',1],['2 years',2],['5 years',5],['10 years',10]])) %>
     <div class="actions">
       <%= form.submit %>
     

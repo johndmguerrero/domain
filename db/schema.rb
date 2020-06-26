@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_26_015304) do
+ActiveRecord::Schema.define(version: 2020_06_26_013758) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,19 +19,27 @@ ActiveRecord::Schema.define(version: 2020_06_26_015304) do
     t.string "name"
     t.string "period"
     t.string "contacts"
+    t.bigint "user_id"
+    t.bigint "order_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_domains_on_order_id"
+    t.index ["user_id"], name: "index_domains_on_user_id"
   end
 
   create_table "orders", force: :cascade do |t|
+    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
   create_table "payment_transactions", force: :cascade do |t|
     t.string "payment_id"
+    t.bigint "order_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_payment_transactions_on_order_id"
   end
 
   create_table "registrants", force: :cascade do |t|
@@ -39,6 +47,7 @@ ActiveRecord::Schema.define(version: 2020_06_26_015304) do
     t.string "fax"
     t.string "email"
     t.string "auth_info_password"
+    t.bigint "domain_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "int_name"
@@ -57,6 +66,7 @@ ActiveRecord::Schema.define(version: 2020_06_26_015304) do
     t.string "lcl_addr_sp"
     t.string "lcl_addr_pc"
     t.string "lcl_addr_cc"
+    t.index ["domain_id"], name: "index_registrants_on_domain_id"
   end
 
   create_table "users", force: :cascade do |t|

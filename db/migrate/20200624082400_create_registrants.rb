@@ -5,6 +5,7 @@ class CreateRegistrants < ActiveRecord::Migration[5.2]
       t.string "fax"
       t.string "email"
       t.string "auth_info_password"
+      t.belongs_to :domain, index: true
       t.timestamps
     end
   end

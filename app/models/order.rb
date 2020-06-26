@@ -1,5 +1,5 @@
 class Order < ApplicationRecord
-  belongs_to :user
+  # belongs_to :user
   has_one :domain
-  has_one :transaction
+  has_one :payment_transactions
 end

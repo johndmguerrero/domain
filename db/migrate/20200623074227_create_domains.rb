@@ -5,6 +5,8 @@ class CreateDomains < ActiveRecord::Migration[5.2]
       t.string :name
       t.string :period
       t.string :contacts
+      t.belongs_to :user, index: true
+      t.belongs_to :order, index: true
       t.timestamps
 
     end
