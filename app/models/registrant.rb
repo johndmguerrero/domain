@@ -1,4 +1,3 @@
 class Registrant < ApplicationRecord
-  has_many :domains
-  belongs_to :user
+  belongs_to :domain
 end
